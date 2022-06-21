@@ -1,5 +1,4 @@
 const oracledb = require('oracledb');
-
 let keys = ["payment_id", "amount", "date_of_payment", "booking_id", "guest_id" ]
 
 // constructor
@@ -24,12 +23,14 @@ Payment.addPayment = (newPayment, result) => {
       return;
     }
 
- 
+ console.log(newPayment.date_of_payment);
+
  
     connection.execute(
       `INSERT INTO payment VALUES ('${newPayment.payment_id}', ${newPayment.amount}, '${newPayment.date_of_payment}', '${newPayment.booking_id}','${newPayment.guest_id}')`,
       (err, res) => {
         if (err) {
+          console.log(`INSERT INTO payment VALUES ('${newPayment.payment_id}', ${newPayment.amount}, '${newPayment.date_of_payment}', '${newPayment.booking_id}','${newPayment.guest_id}')`);
           console.log("error: ", err);
           result(err, null);
           return;
@@ -57,7 +58,7 @@ Payment.findById = (paymentId, result) => {
     }
  
     connection.execute(
-      `SELECT * FROM payment WHERE payment_id = "${paymentId}"`,
+      `SELECT * FROM payment WHERE payment_id = '${paymentId}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -96,7 +97,7 @@ Payment.getPaymentByBookingId = (bookingId, result) => {
     }
  
     connection.execute(
-      `SELECT * FROM payment WHERE booking_id = "${bookingId}"`,
+      `SELECT * FROM payment WHERE booking_id = '${bookingId}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -135,7 +136,7 @@ Payment.getPaymentByGuestId = (guestId, result) => {
     }
  
     connection.execute(
-      `SELECT * FROM payment WHERE guest_id = "${guestId}"`,
+      `SELECT * FROM payment WHERE guest_id = '${guestId}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -245,7 +246,7 @@ Payment.remove = (id, result) => {
     }
  
     connection.execute(
-      `DELETE FROM payment WHERE "payment_id = "${id}"`,
+      `DELETE FROM payment WHERE payment_id = '${id}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);

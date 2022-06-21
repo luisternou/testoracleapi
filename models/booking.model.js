@@ -1,8 +1,8 @@
 const oracledb = require('oracledb');
 
-let keys = ["boking_id", "amount", "check_in", "check_out", "guests", "open_amount", "guest_id", "hotel_id", "room_number" ]
-let booking_keys = ["boking_id", "amount", "check_in", "check_out", "guests", "open_amount", "guest_id", "hotel_id", "room_number", "hotel_name", "hotel_id" ]
-let name_keys = ["boking_id", "amount", "check_in", "check_out", "guests", "open_amount", "guest_id", "hotel_id", "room_number", "hotel_name" ]
+let keys = ["booking_id", "amount", "check_in", "check_out", "guests", "open_amount", "guest_id", "hotel_id", "room_number" ]
+let booking_keys = ["booking_id", "amount", "check_in", "check_out", "guests", "open_amount", "guest_id", "hotel_id", "room_number", "hotel_name", "hotel_id" ]
+let name_keys = ["booking_id", "amount", "check_in", "check_out", "guests", "open_amount", "guest_id", "hotel_id", "room_number", "hotel_name" ]
 
 
 
@@ -67,7 +67,7 @@ Booking.findById = (bookingId, result) => {
     }
  
     connection.execute(
-      `SELECT b.*, h.hotel_name, h.hotel_id FROM booking b JOIN hotel h ON b.hotel_id = h.hotel_id WHERE booking_id = "${bookingId}"`,
+      `SELECT b.*, h.hotel_name, h.hotel_id FROM booking b JOIN hotel h ON b.hotel_id = h.hotel_id WHERE booking_id = '${bookingId}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -109,7 +109,7 @@ Booking.getBookingByHotelId = (hotelId, result) => {
     }
  
     connection.execute(
-      `SELECT b.booking_id, b.amount, b.check_in, b.check_out, b.guests, b.open_amount, b.guest_id, b.hotel_id, b.room_number, h.hotel_name FROM Booking b JOIN Hotel h on b.hotel_id = h.hotel_id WHERE b.hotel_id = "${hotelId}"`,
+      `SELECT b.booking_id, b.amount, b.check_in, b.check_out, b.guests, b.open_amount, b.guest_id, b.hotel_id, b.room_number, h.hotel_name FROM Booking b JOIN Hotel h on b.hotel_id = h.hotel_id WHERE b.hotel_id = '${hotelId}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -190,7 +190,7 @@ Booking.getBookingByCheckinDate = (checkIn, result) => {
     }
  
     connection.execute(
-      `SELECT * FROM booking WHERE check_in = "${checkIn}"`,
+      `SELECT * FROM booking WHERE check_in = '${checkIn}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -229,7 +229,7 @@ Booking.getBookingByCheckoutDate = (checkOut, result) => {
     }
  
     connection.execute(
-      `SELECT * FROM booking WHERE check_out = "${checkOut}"`,
+      `SELECT * FROM booking WHERE check_out = '${checkOut}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -350,7 +350,7 @@ Booking.getBookingByRoom = (roomNumber, hotel_id, result) => {
     }
  
     connection.execute(
-      `SELECT * FROM booking WHERE room_number = ${room_number} AND hotel_id = "${hotel_id}"`,
+      `SELECT * FROM booking WHERE room_number = ${room_number} AND hotel_id = '${hotel_id}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -431,7 +431,7 @@ Booking.updateById = (id, booking, result) => {
     
  
     connection.execute(
-      `UPDATE booking SET amount = '${booking.amount}', check_in = '${booking.check_in}', check_out = '${booking.check_out}', guests = '${booking.guests}', open_amount = '${booking.open_amount}'  WHERE booking_id = "${id}"`,
+      `UPDATE booking SET amount = '${booking.amount}', check_in = '${booking.check_in}', check_out = '${booking.check_out}', guests = '${booking.guests}', open_amount = '${booking.open_amount}'  WHERE booking_id = '${id}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -463,7 +463,7 @@ Booking.remove = (id, result) => {
     }
  
     connection.execute(
-      `DELETE FROM booking WHERE booking_id = "${booking}"`,
+      `DELETE FROM booking WHERE booking_id = '${id}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);

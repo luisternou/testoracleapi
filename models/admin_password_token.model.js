@@ -27,7 +27,7 @@ Admin_Password_Token.addToken = (new_admin_password_token, result) => {
       }
 
       connection.execute(
-        `SELECT * FROM admin_password_token WHERE employee_id = "${new_admin_password_token.employee_id}"`,
+        `SELECT * FROM admin_password_token WHERE employee_id = '${new_admin_password_token.employee_id}'`,
         (err, res) => {
           if (err) {
             console.error("error: ", err);
@@ -37,7 +37,7 @@ Admin_Password_Token.addToken = (new_admin_password_token, result) => {
 
           if (res.length) {
             connection.execute(
-              `DELETE FROM admin_password_token WHERE employee_id = "${new_admin_password_token.employee_id}"`,
+              `DELETE FROM admin_password_token WHERE employee_id = '${new_admin_password_token.employee_id}'`,
               (err, res) => {
                 if (err) {
                   console.error("error: ", err);
@@ -112,7 +112,7 @@ Admin_Password_Token.getToken = (reset_token, result) => {
     }
  
     connection.execute(
-      `SELECT * FROM Admin_Password_token WHERE token = "${reset_token}"`,
+      `SELECT * FROM Admin_Password_token WHERE token = '${reset_token}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -151,7 +151,7 @@ Admin_Password_Token.deleteToken = (employee_id, result) => {
     }
  
     connection.execute(
-      `DELETE FROM Admin_Password_Token WHERE employee_id = "${employee_id}" `,
+      `DELETE FROM Admin_Password_Token WHERE employee_id = '${employee_id}' `,
       (err, res) => {
         if (err) {
           console.log("error: ", err);

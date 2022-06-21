@@ -27,7 +27,7 @@ Guest_Password_Token.addToken = (new_Guest_Password_Token, result) => {
       }
 
       connection.execute(
-        `SELECT * FROM Guest_Password_Token WHERE guest_id = "${new_Guest_Password_Token.guest_id}"`,
+        `SELECT * FROM Guest_Password_Token WHERE guest_id = '${new_Guest_Password_Token.guest_id}'`,
         (err, res) => {
           if (err) {
             console.error("error: ", err);
@@ -37,7 +37,7 @@ Guest_Password_Token.addToken = (new_Guest_Password_Token, result) => {
 
           if (res.length) {
             connection.execute(
-              `DELETE FROM Guest_Password_Token WHERE guest_id = "${new_Guest_Password_Token.guest_id}"`,
+              `DELETE FROM Guest_Password_Token WHERE guest_id = '${new_Guest_Password_Token.guest_id}'`,
               (err, res) => {
                 if (err) {
                   console.error("error: ", err);
@@ -112,7 +112,7 @@ Guest_Password_Token.getToken = (reset_token, result) => {
     }
  
     connection.execute(
-      `SELECT * FROM Guest_Password_Token WHERE token = "${reset_token}"`,
+      `SELECT * FROM Guest_Password_Token WHERE token = '${reset_token}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -151,7 +151,7 @@ Guest_Password_Token.deleteToken = (guest_id, result) => {
     }
  
     connection.execute(
-      `DELETE FROM Guest_Password_Token WHERE guest_id = "${guest_id}" `,
+      `DELETE FROM Guest_Password_Token WHERE guest_id = '${guest_id}' `,
       (err, res) => {
         if (err) {
           console.log("error: ", err);

@@ -30,18 +30,12 @@ Employee.addEmployee = (newEmployee, result) => {
       result(err, null);
       return;
     }
-
+    
     connection.execute(
-      `INSERT INTO employee (employee_id, dob, name, position, hotel_id) VALUES (?, ?, ?, ?, ?) `,
-      [
-        newEmployee.employee_id,
-        newEmployee.dob,
-        newEmployee.name,
-        newEmployee.position,
-        newEmployee.hotel_id,
-      ],
+      `INSERT INTO employee (employee_id, dob, name, position, hotel_id) VALUES ('${newEmployee.employee_id}', '${newEmployee.dob}', '${newEmployee.name}', '${newEmployee.position}', '${newEmployee.hotel_id}') `,
       (err, res) => {
         if (err) {
+          console.log("here");
           console.log("error: ", err);
           result(err, null);
           return;
@@ -67,13 +61,14 @@ Employee.addEmployee = (newEmployee, result) => {
             }
           );
         } else if (newEmployee.position == "butler") {
-
+            
           connection.execute(
-            `INSERT INTO butler_staff (employee_id, hotel_id, room_number) VALUES (?, ?, NULL)`,
-            [newEmployee.employee_id, newEmployee.hotel_id],
+            `INSERT INTO butler_staff (employee_id, hotel_id, room_number) VALUES ('${newEmployee.employee_id}', '${newEmployee.hotel_id}', NULL)`,
+            
             (err, res) => {
 
               if (err) {
+                console.log("or here");
                 console.log("error: ", err);
                 result(err, null);
                 return;
@@ -133,7 +128,7 @@ Employee.findById = (employee_id, result) => {
     }
  
     connection.execute(
-      `SELECT e.employee_id, e.dob, e.name, e.position, e.hotel_id, h.hotel_name FROM employee e JOIN hotel h ON e.hotel_id = h.hotel_id WHERE employee_id = "${employee_id}"`,
+      `SELECT e.employee_id, e.dob, e.name, e.position, e.hotel_id, h.hotel_name FROM employee e JOIN hotel h ON e.hotel_id = h.hotel_id WHERE employee_id = '${employee_id}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -173,7 +168,7 @@ Employee.findButlerByRoomNumber = (room_number, hotel_id, result) => {
     }
  
     connection.execute(
-      `SELECT e.employee_id, e.dob, e.name, e.position, e.hotel_id FROM employee e JOIN butler_staff bs ON e.employee_id = bs.employee_id WHERE bs.hotel_id = "${hotel_id}" AND bs.room_number = "${room_number}"`,
+      `SELECT e.employee_id, e.dob, e.name, e.position, e.hotel_id FROM employee e JOIN butler_staff bs ON e.employee_id = bs.employee_id WHERE bs.hotel_id = '${hotel_id}' AND bs.room_number = '${room_number}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -213,7 +208,7 @@ Employee.findHousekeepingByRoomNumber = (room_number, hotel_id, result) => {
     }
  
     connection.execute(
-      `SELECT e.employee_id, e.dob, e.name, e.position, e.hotel_id FROM employee e JOIN room_cleaning rc ON e.employee_id = rc.employee_id WHERE rc.hotel_id = "${hotel_id}" AND rc.room_number = "${room_number}"`,
+      `SELECT e.employee_id, e.dob, e.name, e.position, e.hotel_id FROM employee e JOIN room_cleaning rc ON e.employee_id = rc.employee_id WHERE rc.hotel_id = '${hotel_id}' AND rc.room_number = '${room_number}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -254,7 +249,7 @@ Employee.findByHotelId = (hotelId, result) => {
     }
  
     connection.execute(
-      `SELECT * FROM employee WHERE hotel_id = "${hotelId}`,
+      `SELECT * FROM employee WHERE hotel_id = '${hotelId}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -299,7 +294,7 @@ Employee.getAdminEmployee = (employee_id, result) => {
       WHERE e.employee_id = (
         SELECT employee_id 
         FROM Admin_Staff 
-        WHERE employee_id = '"${employee_id}"'
+        WHERE employee_id = ''${employee_id}''
       )`,
       (err, res) => {
         if (err) {
@@ -340,7 +335,7 @@ Employee.getButlerEmployee = (employee_id, result) => {
     }
  
     connection.execute(
-      `SELECT * FROM butler_staff WHERE employee_id = "${employee_id}"`,
+      `SELECT * FROM butler_staff WHERE employee_id = '${employee_id}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -381,7 +376,7 @@ Employee.getHousekeepingEmployee = (employee_id, result) => {
     }
  
     connection.execute(
-      `SELECT * FROM housekeeping_staff WHERE employee_id = "${employee_id}"`,
+      `SELECT * FROM housekeeping_staff WHERE employee_id = '${employee_id}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -422,7 +417,7 @@ Employee.findByPosition = (position, result) => {
     }
  
     connection.execute(
-      `SELECT * FROM employee WHERE position = "${position}`,
+      `SELECT * FROM employee WHERE position = '${position}`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -461,7 +456,7 @@ Employee.findByDOB = (dob, result) => {
     }
  
     connection.execute(
-      `SELECT * FROM employee WHERE dob = "${dob}"`,
+      `SELECT * FROM employee WHERE dob = '${dob}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -500,7 +495,7 @@ Employee.findByName = (name, result) => {
     }
  
     connection.execute(
-      `SELECT * FROM employee WHERE name like "%${name}"`,
+      `SELECT * FROM employee WHERE name like "%${name}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -614,7 +609,7 @@ WHERE e.employee_id = (
               dob: admin[2],
               hotel_id: admin[4],
             },
-            process.env.JWT_SECRET,
+            'hotelmngr',
             {
               expiresIn: "1h",
             }
@@ -697,7 +692,7 @@ oracledb.getConnection({
       return;
     }
 
-    connection.execute(`UPDATE admin_staff SET password = "${password}" WHERE (SELECT employee_id FROM admin_password_token WHERE token = "${token}")`,
+    connection.execute(`UPDATE admin_staff SET password = '${password}' WHERE (SELECT employee_id FROM admin_password_token WHERE token = '${token}')`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -705,7 +700,7 @@ oracledb.getConnection({
           return;
         }
 
-        connection.execute(`DELETE FROM admin_password_token WHERE token = "${token}"`,
+        connection.execute(`DELETE FROM admin_password_token WHERE token = '${token}'`,
           (err, res) => {
             if (err) {
               console.log("error: ", err);
@@ -722,7 +717,7 @@ oracledb.getConnection({
 };
 
 Employee.updateEmployee = (id, employee, result) => {
-  //`UPDATE employee SET dob = ?, name = ?, position = ?, hotel_id = ? WHERE employee_id = "${id}"`
+  //`UPDATE employee SET dob = ?, name = ?, position = ?, hotel_id = ? WHERE employee_id = '${id}'`
   oracledb.getConnection({
     user: "a01649986",
     password: "dbs22",
@@ -735,7 +730,7 @@ Employee.updateEmployee = (id, employee, result) => {
       return;
     }
 
-    connection.execute(`UPDATE employee SET dob = "${employee.dob}", name = "${employee.name}", position = "${employee.position}", hotel_id = "${employee.hotel_id}" WHERE employee_id = "${id}"`,
+    connection.execute(`UPDATE employee SET dob = '${employee.dob}', name = '${employee.name}', position = '${employee.position}', hotel_id = '${employee.hotel_id}' WHERE employee_id = '${id}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -765,7 +760,7 @@ Employee.updateAdminEmployee = (id, employee, result) => {
       return;
     }
 
-    connection.execute(`UPDATE employee SET dob = "${employee.dob}", name = "${employee.name}", position = "${employee.position}" WHERE employee_id = "${id}"`,
+    connection.execute(`UPDATE employee SET dob = '${employee.dob}', name = '${employee.name}', position = '${employee.position}' WHERE employee_id = '${id}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -773,7 +768,7 @@ Employee.updateAdminEmployee = (id, employee, result) => {
           return;
         }
 
-        connection.execute(`UPDATE admin_staff SET email = "${employee.email}" WHERE employee_id = "${id}"`,
+        connection.execute(`UPDATE admin_staff SET email = '${employee.email}' WHERE employee_id = '${id}'`,
           (err, res) => {
             if (err) {
               console.log("error: ", err);
@@ -804,7 +799,7 @@ Employee.deleteById = (employee_id, result) => {
       return;
     }
 
-    connection.execute(`DELETE FROM employee WHERE employee_id = "${employee_id}"`,
+    connection.execute(`DELETE FROM employee WHERE employee_id = '${employee_id}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -865,7 +860,7 @@ Employee.assignButler = (butler, room, result) => {
       return;
     }
 
-    connection.execute(`UPDATE butler_staff SET room_number = ${room} WHERE employee_id = "${butler}"`,
+    connection.execute(`UPDATE butler_staff SET room_number = ${room} WHERE employee_id = '${butler}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -926,7 +921,7 @@ Employee.unassignButler = (rooms, result) => {
       return;
     }
 
-    connection.execute(`UPDATE  butler_staff SET hotel_id = NULL, room_number = NULL WHERE employee_id = "${rooms.employee_id}"`,
+    connection.execute(`UPDATE  butler_staff SET hotel_id = NULL, room_number = NULL WHERE employee_id = '${rooms.employee_id}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -957,7 +952,7 @@ Employee.unassignHousekeepingToRoom = (rooms, result) => {
       return;
     }
 
-    connection.execute(`DELETE FROM room_cleaning WHERE hotel_id = "${rooms[0][0]}" AND room_number = "${rooms[0][1]}" AND employee_id = "${rooms[0][2]}"`,
+    connection.execute(`DELETE FROM room_cleaning WHERE hotel_id = '${rooms[0][0]}' AND room_number = '${rooms[0][1]}' AND employee_id = '${rooms[0][2]}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);

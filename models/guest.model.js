@@ -81,23 +81,26 @@ Guest.login = (email, password, result) => {
             return;
           }
           if (res.rows.length) {
+            console.log("res.rows: ", res.rows);
             const guest = res.rows[0];
-            const isPasswordValid = bcrypt.compareSync(password, guest.password);
+            console.log("guest: ", guest);
+           console.log("guest.password: ", guest[4]);
+            const isPasswordValid = bcrypt.compareSync(password, guest[4]);
 
             if (!isPasswordValid) {
               console.error("error: ", err);
               result({ kind: "password_incorrect" }, null);
               return;
             }
-
+           
             const token = jwt.sign(
               {
-                guest_id: guest.guest_id,
-                name: guest.name,
-                email: guest.email,
-                dob: guest.dob,
+                guest_id: guest[0],
+                name: guest[1],
+                email: guest[3],
+                dob: guest[2],
               },
-              process.env.JWT_SECRET,
+              "hotelmngr",
               {
                 expiresIn: "1h",
               }
@@ -196,9 +199,9 @@ Guest.getById = (guest_id, result) => {
 Guest.updatePassword = (token, password, result) => {
 
   // update the password of the guest with the given token in the database using this query:
-  // UPDATE guest SET password = "${password}" WHERE (SELECT guest_id FROM guest_password_token WHERE token = "${token}")
+  // UPDATE guest SET password = '${password}' WHERE (SELECT guest_id FROM guest_password_token WHERE token = '${token}')
   // delete the token from the database using this query:
-  // DELETE FROM guest_password_token WHERE token = "${token}"
+  // DELETE FROM guest_password_token WHERE token = '${token}'
 
   oracledb.getConnection({
     user: "a01649986",
@@ -212,7 +215,7 @@ Guest.updatePassword = (token, password, result) => {
       return;
     }
 
-    connection.execute(`UPDATE guest SET password = "${password}" WHERE (SELECT guest_id FROM guest_password_token WHERE token = '${token}')`, (err, res) => {
+    connection.execute(`UPDATE guest SET password = '${password}' WHERE (SELECT guest_id FROM guest_password_token WHERE token = '${token}')`, (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(err, null);
@@ -249,7 +252,7 @@ Guest.getByEmail = (email, result) => {
     }
  
     connection.execute(
-      `SELECT * FROM guest WHERE email = "${email}"`,
+      `SELECT * FROM guest WHERE email = '${email}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -288,7 +291,7 @@ Guest.getByName = (guest_name, result) => {
     }
  
     connection.execute(
-      `SELECT * FROM guest WHERE name = "${guest_name}"`,
+      `SELECT * FROM guest WHERE name = '${guest_name}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -327,7 +330,7 @@ Guest.getByDOB = (dob, result) => {
     }
  
     connection.execute(
-      `SELECT * FROM guest WHERE dob = "${dob}"`,
+      `SELECT * FROM guest WHERE dob = '${dob}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -366,7 +369,7 @@ oracledb.getConnection({
       return;
     }
 
-    connection.execute(`UPDATE guest SET name = "${guest.name}", dob = "${guest.dob}", email = "${guest.email}" WHERE guest_id = "${guest_id}"`, (err, res) => {
+    connection.execute(`UPDATE guest SET name = '${guest.name}', dob = '${guest.dob}', email = '${guest.email}' WHERE guest_id = '${guest_id}'`, (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(err, null);
@@ -382,7 +385,7 @@ oracledb.getConnection({
 };
 
 Guest.updateGuestProfile = (guest_id, guest, result) => {
-  //update the guest with the query UPDATE guest SET name = "${guest.name}", dob = "${guest.dob}", email = "${guest.email}", password = "${guest.password}" WHERE guest_id = "${guest_id}"
+  //update the guest with the query UPDATE guest SET name = '${guest.name}', dob = '${guest.dob}', email = '${guest.email}', password = '${guest.password}' WHERE guest_id = '${guest_id}'
   oracledb.getConnection({
     user: "a01649986",
     password: "dbs22",
@@ -426,7 +429,7 @@ Guest.delete = (guest_id, result) => {
     }
  
     connection.execute(
-      `DELETE FROM guest WHERE guest_id = "${guest_id}"`,
+      `DELETE FROM guest WHERE guest_id = '${guest_id}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);

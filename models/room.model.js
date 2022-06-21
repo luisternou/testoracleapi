@@ -181,7 +181,7 @@ Room.findByRoomType = (roomType, hotel_id, result) => {
     }
  
     connection.execute(
-      `SELECT * FROM room WHERE hotel_id = "${hotel_id} AND type = "${roomType}"`,
+      `SELECT * FROM room WHERE hotel_id = '${hotel_id} AND type = '${roomType}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -259,7 +259,7 @@ Room.getAvailableRooms = (hotel_id, checkin, checkout, result) => {
     }
  
     connection.execute(
-      `SELECT * FROM room WHERE hotel_id = "${hotel_id}" AND room_number NOT IN (SELECT room_number FROM Booking WHERE hotel_id = "${hotel_id}" AND (check_in BETWEEN "${checkin}" AND "${checkout}" OR check_out BETWEEN "${checkin}" AND "${checkout}"))`,
+      `SELECT * FROM room WHERE hotel_id = '${hotel_id}' AND room_number NOT IN (SELECT room_number FROM Booking WHERE hotel_id = '${hotel_id}' AND (check_in BETWEEN '${checkin}' AND '${checkout}' OR check_out BETWEEN '${checkin}' AND '${checkout}'))`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -340,7 +340,7 @@ Room.getAmenities = (hotel_id, room_number, result) => {
     }
  
     connection.execute(
-      `SELECT a.amenity_name, r.room_number, r.hotel_id FROM Room_Amenity r JOIN Amenity a ON a.amenity_id = r.amenity_id WHERE hotel_id = "${hotel_id}" AND room_number = "${room_number}"`,
+      `SELECT a.amenity_name, r.room_number, r.hotel_id FROM Room_Amenity r JOIN Amenity a ON a.amenity_id = r.amenity_id WHERE hotel_id = '${hotel_id}' AND room_number = '${room_number}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -452,7 +452,7 @@ Room.deleteById = (room_number, hotel_id, result) => {
     }
  
     connection.execute(
-      `DELETE FROM room WHERE hotel_id = "${hotel_id}" AND room_number = ${room_number}`,
+      `DELETE FROM room WHERE hotel_id = '${hotel_id}' AND room_number = ${room_number}`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);

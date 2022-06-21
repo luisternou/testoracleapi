@@ -2,7 +2,7 @@ const res = require('express/lib/response');
 const oracledb = require('oracledb');
 
 
-let keys = ["hotel_id", "hotel_name", "stars", "number_room", "street_number", "streetname", "postal_code", "city", "country", "description", "photo_url"]
+let keys = ["hotel_id", "hotel_name", "stars", "number_room", "street_number", "street_name", "postal_code", "city", "country", "description", "photo_url"]
 let city_keys = ["city"]
 
 
@@ -197,7 +197,7 @@ const Hotel = function (hotel) {
       console.log(`SELECT DISTINCT * FROM Hotel WHERE city Like '%${search.city}%' AND hotel_id IN (SELECT hotel_id FROM Room WHERE room_number NOT IN (SELECT room_number FROM Booking WHERE check_in <= '${search.checkin}' AND check_out >= '${search.checkout}'))`);
    
       connection.execute(
-        `SELECT DISTINCT * FROM Hotel WHERE city Like '%${search.city}%' AND hotel_id IN (SELECT hotel_id FROM Room WHERE room_number NOT IN (SELECT room_number FROM Booking WHERE check_in <= '${search.checkin}' AND check_out >= '${search.checkout}'))`,
+        `SELECT DISTINCT * FROM Hotel WHERE city like '%${search.city}%' AND hotel_id IN (SELECT hotel_id FROM Room WHERE room_number NOT IN (SELECT room_number FROM Booking WHERE check_in <= '${search.checkin}' AND check_out >= '${search.checkout}'))`,
         (err, res) => {
           if (err) {
             console.log("error: ", err);

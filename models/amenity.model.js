@@ -95,7 +95,7 @@ Amenity.getById = (amenity_id, result) => {
     }
  
     connection.execute(
-      `SELECT * FROM amenity WHERE amenity_id = "${amenity_id}"`,
+      `SELECT * FROM amenity WHERE amenity_id = '${amenity_id}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -134,7 +134,7 @@ Amenity.getByName = (amenity_name, result) => {
     }
  
     connection.execute(
-      `SELECT * FROM amenity WHERE amenity_name = "${amenity_name}"`,
+      `SELECT * FROM amenity WHERE amenity_name = '${amenity_name}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -175,7 +175,7 @@ Amenity.getAllAmenitiesOfRoom = (hotel_id, room_number, result) => {
     }
  
     connection.execute(
-      `SELECT a.amenity_name FROM Room_Amenity r JOIN Amenity a ON r.amenity_id = a.amenity_id WHERE r.hotel_id = "${hotel_id}" AND r.room_number = "${room_number}"`,
+      `SELECT a.amenity_name FROM Room_Amenity r JOIN Amenity a ON r.amenity_id = a.amenity_id WHERE r.hotel_id = '${hotel_id}' AND r.room_number = '${room_number}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -252,7 +252,7 @@ Amenity.unassignAmenityToRoom = (rooms, result) => {
     }
  
     connection.execute(
-      `DELETE FROM room_amenity WHERE hotel_id = "${rooms[0][0]}" AND room_number = "${rooms[0][1]}" AND amenity_id = "${rooms[0][2]}"`,
+      `DELETE FROM room_amenity WHERE hotel_id = '${rooms[0][0]}' AND room_number = '${rooms[0][1]}' AND amenity_id = '${rooms[0][2]}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -287,7 +287,7 @@ Amenity.updateAmenity = (amenity_id, amenity, result) => {
     
  
     connection.execute(
-      `UPDATE amenity SET amenity_name = "${amenity.amenity_name}" WHERE amenity_id = "${amenity_id}"`,
+      `UPDATE amenity SET amenity_name = '${amenity.amenity_name}' WHERE amenity_id = '${amenity_id}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -318,7 +318,7 @@ Amenity.delete = (amenity_id, result) => {
     }
  
     connection.execute(
-      `DELETE FROM amenity WHERE amenity_id = "${amenity_id}"`,
+      `DELETE FROM amenity WHERE amenity_id = '${amenity_id}'`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);
