@@ -42,13 +42,14 @@ oracledb.getConnection({
           return;
         }
         connection.execute(
-          `INSERT INTO guest (guest_id, name, dob, email, password) VALUES (guest_seq.nextval, '${new_guest.name}', '${new_guest.dob}', '${new_guest.email}', '${new_guest.password}')`,
+          `INSERT INTO guest VALUES ('${new_guest.guest_id}', '${new_guest.name}', '${new_guest.dob}', '${new_guest.email}', '${new_guest.password}')`,
           (err, res) => {
             if (err) {
               console.log("error: ", err);
               result(err, null);
               return;
             }
+            connection.execute("commit")
             result(null, new_guest);
           }
         );

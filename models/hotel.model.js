@@ -4,6 +4,9 @@ const oracledb = require('oracledb');
 
 let keys = ["hotel_id", "hotel_name", "stars", "number_room", "street_number", "street_name", "postal_code", "city", "country", "description", "photo_url"]
 let city_keys = ["city"]
+let room_keys = ["suite", "standard"]
+
+
 
 
 const Hotel = function (hotel) {
@@ -224,6 +227,7 @@ const Hotel = function (hotel) {
   // TODO 
 
   Hotel.getStats = (id, result) => {
+    let result_object = {}
     oracledb.getConnection({
       user: "a01649986",
       password: "dbs22",
@@ -237,32 +241,60 @@ const Hotel = function (hotel) {
       }
    
       connection.execute(
-        `SELECT * FROM hotel WHERE hotel_id = '${id}'`,
+        `SELECT Room.type, COUNT(Room.room_number) AS room_count FROM Room WHERE Room.hotel_id = '${id}' GROUP BY Room.type`,
         (err, res) => {
           if (err) {
             console.log("error: ", err);
             result(err, null);
             return;
           }
-          let temp = res.rows;
-          let temp_result = []
-          temp.map((hotel) => {
-              let obj = {}
-              keys.map((key, i) => {
-                  obj[key] = hotel[i]
+          let temp = {}
+          
+         res.rows.forEach((element) => {
+          temp[element[0]] = element[1]
 
-              })
-              temp_result.push(obj)
-          })
+        })
+        result_object.room_count = temp
+  
           
           
-          result(null, temp_result[0]);
+        
+        }
+      );
+
+      connection.execute(
+        `SELECT COUNT(Employee.employee_id) AS employee_count FROM Employee WHERE Employee.hotel_id = '${id}'`,
+        (err, res) => {
+          if (err) {
+            console.log("error: ", err);
+            result(err, null);
+            return;
+          }
+          
+          
+          result_object.employee_count = res.rows[0][0]
+          
+        }
+      );
+
+      connection.execute(
+        `SELECT COUNT(Booking.booking_id) AS booking_count FROM Booking WHERE Booking.hotel_id = '${id}'`,
+        (err, res) => {
+          if (err) {
+            console.log("error: ", err);
+            result(err, null);
+            return;
+          }
+          
+          
+          result_object.booking_count = res.rows[0][0]
+          result(null, result_object);
         }
       );
     });
   };
   
-// TODO update hotel
+
 
 Hotel.updateById = (id , hotel, result) => {
     oracledb.getConnection({

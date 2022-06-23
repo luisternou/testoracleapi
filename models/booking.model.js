@@ -33,9 +33,9 @@ Booking.addBooking = (newBooking, result) => {
     }
 
  
- 
+ console.log(`INSERT INTO booking VALUES ('${newBooking.booking_id}', '${newBooking.amount}', ${newBooking.check_in}, ${newBooking.check_out},'${newBooking.guests}', '${newBooking.open_amount}', '${newBooking.guest_id}', '${newBooking.hotel_id}', '${newBooking.room_number}`);
     connection.execute(
-      `INSERT INTO booking VALUES ('${newBooking.booking_id}', '${newBooking.amount}', ${newBooking.check_in}, ${newBooking.check_out},'${newBooking.guests}', '${newBooking.open_amount}', '${newBooking.guest_id}', '${newBooking.hotel_id}', '${newBooking.room_number}')`,
+      `INSERT INTO booking VALUES ('${newBooking.booking_id}', '${newBooking.amount}', '${newBooking.check_in}', '${newBooking.check_out}','${newBooking.guests}', '${newBooking.open_amount}', '${newBooking.guest_id}', '${newBooking.hotel_id}', '${newBooking.room_number}')`,
       (err, res) => {
         if (err) {
           console.log("error: ", err);

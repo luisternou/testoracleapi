@@ -2,6 +2,7 @@ const oracledb = require('oracledb');
 
 
 let keys = ["amenity_id", "amenity_name"]
+let name_keys = ["amenity_name"]
 
 // constructor
 
@@ -186,7 +187,7 @@ Amenity.getAllAmenitiesOfRoom = (hotel_id, room_number, result) => {
         let temp_result = []
         temp.map((hotel) => {
             let obj = {}
-            keys.map((key, i) => {
+            name_keys.map((key, i) => {
                 obj[key] = hotel[i]
 
             })
@@ -217,10 +218,10 @@ Amenity.assignAmenityToRoom = (rooms, result) => {
     }
 
  
- 
+
     connection.execute(
-      `INSERT INTO room_amenity (hotel_id, room_number, amenity_id) VALUES ?`,
-      [rooms],
+      `INSERT INTO room_amenity VALUES ('${rooms[0][0]}', '${rooms[0][1]}', '${rooms[0][2]}' )`,
+      
       (err, res) => {
         if (err) {
           console.log("error: ", err);

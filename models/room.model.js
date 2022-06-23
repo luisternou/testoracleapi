@@ -383,9 +383,8 @@ Room.updateRoom = (room_number, hotel_id, room, result) => {
       }
 
       
-   
       connection.execute(
-        `UPDATE room SET number_guests = '${room.number_guests}', area = '${room.area}, type = '${room.type}, price = '${room.price}, conected_room_hotel_id = '${hotel_id}, conected_room_number = '${room.roomsToAssign} WHERE room_number = '${room_number}' AND hotel_id = '${hotel_id}'`,
+        `UPDATE room SET number_guests = '${room.number_guests}', area = '${room.area}', type = '${room.type}', price = '${room.price}', conected_room_hotel_id = '${hotel_id}', conected_room_number = '${room.roomsToAssign}' WHERE room_number = '${room_number}' AND hotel_id = '${hotel_id}'`,
         (err, res) => {
           if (err) {
             console.log("error: ", err);
@@ -395,9 +394,26 @@ Room.updateRoom = (room_number, hotel_id, room, result) => {
      
           connection.execute("commit")
           
-          result(null, res);
+          
         }
       );
+
+      connection.execute(
+        `UPDATE room SET conected_room_hotel_id = '${hotel_id}', conected_room_number = '${room_number}' WHERE room_number = '${room.roomsToAssign}' AND hotel_id = '${hotel_id}'`,
+        (err, res) => {
+          if (err) {
+            console.log("error: ", err);
+            result(err, null);
+            return;
+          }
+     
+          connection.execute("commit")
+          result(null, res);
+          
+          
+        }
+      );
+      
     });
     
     
@@ -418,7 +434,7 @@ Room.updateRoom = (room_number, hotel_id, room, result) => {
       
    
       connection.execute(
-        `UPDATE room SET number_guests = '${room.number_guests}', area = '${room.area}', type = '${room.area}', price = '${room.price}' WHERE room_number = '${room_number}' AND hotel_id = '${hotel_id}'`,
+        `UPDATE room SET number_guests = '${room.number_guests}', area = '${room.area}', type = '${room.type}', price = '${room.price}' WHERE room_number = '${room_number}' AND hotel_id = '${hotel_id}'`,
         (err, res) => {
           if (err) {
             console.log("error: ", err);
@@ -460,7 +476,7 @@ Room.deleteById = (room_number, hotel_id, result) => {
           return;
         }
 
-        
+        connection.execute('commit')
         
         result(null, res);
       }
@@ -490,7 +506,7 @@ Room.deleteAll = (result) => {
           return;
         }
         
-        
+        connection.execute('commit')
         result(null, res);
       }
     );
